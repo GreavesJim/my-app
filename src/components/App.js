@@ -6,13 +6,13 @@ import Search from "./Search";
 import { initialState, reducer } from "../store/reducer";
 import axios from "axios";
 
-const MOVIE_API_URL = "https://www.omdbapi.com/?s=man&apikey=4a3b711b";
+const MOVIE_API_URL = "https://www.omdbapi.com/?apikey=b0e6dd68";
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    axios.get(MOVIE_API_URL).then((jsonResponse) => {
+    axios.get(MOVIE_API_URL + "&s=spider").then((jsonResponse) => {
       dispatch({
         type: "SEARCH_MOVIES_SUCCESS",
         payload: jsonResponse.data.Search,
@@ -30,21 +30,19 @@ const App = () => {
       type: "SEARCH_MOVIES_REQUEST",
     });
 
-    axios(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`).then(
-      (jsonResponse) => {
-        if (jsonResponse.data.Response === "True") {
-          dispatch({
-            type: "SEARCH_MOVIES_SUCCESS",
-            payload: jsonResponse.data.Search,
-          });
-        } else {
-          dispatch({
-            type: "SEARCH_MOVIES_FAILURE",
-            error: jsonResponse.data.Error,
-          });
-        }
+    axios(`${MOVIE_API_URL}&s=${searchValue}`).then((jsonResponse) => {
+      if (jsonResponse.data.Response === "True") {
+        dispatch({
+          type: "SEARCH_MOVIES_SUCCESS",
+          payload: jsonResponse.data.Search,
+        });
+      } else {
+        dispatch({
+          type: "SEARCH_MOVIES_FAILURE",
+          error: jsonResponse.data.Error,
+        });
       }
-    );
+    });
   };
 
   const { movies, errorMessage, loading } = state;
