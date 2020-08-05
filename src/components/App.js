@@ -20,11 +20,6 @@ const App = () => {
     });
   }, []);
 
-  // you can add this to the onClick listener of the Header component
-  const refreshPage = () => {
-    window.location.reload();
-  };
-
   const search = (searchValue) => {
     dispatch({
       type: "SEARCH_MOVIES_REQUEST",
